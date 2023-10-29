@@ -5,7 +5,7 @@ import ProductsList from "../components/productsList";
 export const HomePage = () => {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState("");
+  const [loading, setLoading] = useState("Cargando...");
 
   useEffect(() => {
     const getAllProducts = async () => {
@@ -22,7 +22,6 @@ export const HomePage = () => {
     getAllProducts();
   }, [products.length]);
 
-  console.log(products);
   return (
     <section>
       <h1>Bienvenido a Artistas de la madera</h1>

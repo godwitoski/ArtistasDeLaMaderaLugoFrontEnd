@@ -83,3 +83,110 @@ export const getSingleProductService = async (id) => {
 
   return data.products;
 };
+
+//UserInfo
+export const getUsersService = async (token) => {
+  const response = await fetch(`${import.meta.env.VITE_APP_BACKEND}/users`, {
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `${token}`,
+    },
+  });
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message);
+  }
+
+  return data.users;
+};
+
+//getmyCart
+export const getMyUserCartService = async (token) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_APP_BACKEND}/user/mycart`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `${token}`,
+      },
+    }
+  );
+  const data = await response.json();
+
+  console.log(data, "cart");
+  if (!response.ok) {
+    throw new Error(data.message);
+  }
+
+  return data;
+};
+
+//getMyOrder
+export const getMyOrdersService = async (token) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_APP_BACKEND}/user/myorders`,
+    {
+      headers: {
+        "content-type": "aplication/json",
+        authorization: `${token}`,
+      },
+    }
+  );
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message);
+  }
+
+  return data;
+};
+
+//getMyProfile
+export const getMyProfileService = async (token) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_APP_BACKEND}/user/myuser`,
+    {
+      headers: {
+        "content-type": "aplication/json",
+        authorization: `${token}`,
+      },
+    }
+  );
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.message);
+  }
+
+  return data;
+};
+
+// EditProfile
+export const editUserDataService = async ({
+  token,
+  email,
+  name,
+  username,
+  pwd,
+  pwdNew,
+  repeatpwd,
+}) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_APP_BACKEND}/user/editprofile`,
+    {
+      method: "PUT",
+      body: JSON.stringify({ email, name, username, pwd, pwdNew, repeatpwd }),
+      headers: {
+        "Content-Type": "application/json",
+        authorization: token,
+      },
+    }
+  );
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message);
+  }
+
+  return data;
+};
