@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { getMyProfileService } from "../services/index";
 import { AuthContext } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 
 function MyProfile() {
   const [user, setUser] = useState([]);

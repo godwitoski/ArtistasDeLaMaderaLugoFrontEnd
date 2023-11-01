@@ -56,7 +56,7 @@ export const getMyUserDataService = async (token) => {
     throw new Error(json.message);
   }
 
-  return json.data;
+  return json.user;
 };
 
 //HOMEPAGE
@@ -114,7 +114,6 @@ export const getMyUserCartService = async (token) => {
   );
   const data = await response.json();
 
-  console.log(data, "cart");
   if (!response.ok) {
     throw new Error(data.message);
   }
@@ -183,6 +182,146 @@ export const editUserDataService = async ({
     }
   );
   const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message);
+  }
+
+  return data;
+};
+
+//searchProducts
+export const searchProductService = async (searchParams) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_APP_BACKEND}/products/search?${
+      searchParams.name
+        ? `name=${searchParams.name}`
+        : `type=${searchParams.type}`
+    }`
+  );
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message);
+  }
+
+  return data;
+};
+
+//GetSales
+export const getSalesInfoService = async ({ token, year, month }) => {
+  const queryParams = [];
+
+  if (year) {
+    queryParams.push(`year=${year}`);
+  }
+
+  if (month) {
+    queryParams.push(`month=${month}`);
+  }
+
+  let url = `${import.meta.env.VITE_APP_BACKEND}/products/sales`;
+
+  if (queryParams.length > 0) {
+    url += `?${queryParams.join("&")}`;
+  }
+
+  const response = await fetch(url, {
+    headers: {
+      "content-type": "aplication/json",
+      authorization: `${token}`,
+    },
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.message);
+  }
+
+  return data;
+};
+
+// addToCartService.js
+export const addToCartService = async (productId, token) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_APP_BACKEND}/products/${productId}/saveProduct`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: token,
+      },
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message);
+  }
+
+  return data;
+};
+
+// addToCartService.js
+export const removeToCartService = async (productId, token) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_APP_BACKEND}/products/${productId}`,
+    {
+      method: "delete",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: token,
+      },
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message);
+  }
+
+  return data;
+};
+
+// deleteproduct
+export const deleteProductService = async (productId, token) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_APP_BACKEND}/product/${productId}`,
+    {
+      method: "delete",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: token,
+      },
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message);
+  }
+
+  return data;
+};
+
+// orderProduct
+export const orderProductsService = async ({ formData, token }) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_APP_BACKEND}/products/sendOrder`,
+    {
+      method: "POST",
+      body: JSON.stringify(formData),
+      headers: {
+        "Content-Type": "application/json",
+        authorization: token,
+      },
+    }
+  );
+
+  const data = await response.json();
+  console.log(data);
 
   if (!response.ok) {
     throw new Error(data.message);

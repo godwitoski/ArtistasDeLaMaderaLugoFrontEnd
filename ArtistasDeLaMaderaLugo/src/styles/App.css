@@ -4,3 +4,15 @@
 img{
   width: 300px;
 }
+
+/* Agrega este estilo en tu archivo CSS */
+.t-ventas {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.t-ventas th, .t-ventas td {
+  border: 1px solid #000;
+  padding: 8px;
+  text-align: left;
+}

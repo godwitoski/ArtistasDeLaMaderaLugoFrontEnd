@@ -3,15 +3,16 @@ import { editUserDataService } from "../services/index";
 import { AuthContext } from "../context/AuthContext";
 
 export const EditProfile = () => {
-  const { token, userName, logout, name, emailAuth } = useContext(AuthContext);
+  const { token, userName, logout, name, emailAuth, phone, address } =
+    useContext(AuthContext);
   const [email, setEmail] = useState(emailAuth);
   const [nameEdit, setNameEdit] = useState(name);
   const [username, setUsername] = useState(userName);
+  const [phoneEdit, setPhoneEdit] = useState(phone);
+  const [addressEdit, setAddressEdit] = useState(address);
   const [pwd, setPwd] = useState("");
   const [pwdNew, setPwdNew] = useState("");
   const [repeatpwd, setRepeatPwd] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
   const [error, setError] = useState("");
 
   const handleEditForm = async (e) => {
@@ -31,8 +32,8 @@ export const EditProfile = () => {
         pwd,
         pwdNew,
         repeatpwd,
-        address,
-        phone,
+        address: addressEdit,
+        phone: phoneEdit,
       });
       if (response.status === "OK" && pwdNew && repeatpwd) {
         alert(
@@ -50,12 +51,23 @@ export const EditProfile = () => {
   };
 
   return (
-    <section className="edit-profile" onClick={handleOverlayClick}>
+    <section className="edit-profile">
       <div>
         <h1>Editar perfil:</h1>
         <div className="user-data">
           <form className="edit-user-data" onSubmit={handleEditForm}>
             <div>
+              <fieldset>
+                <label htmlFor="name">Nombre * </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={nameEdit}
+                  required
+                  onChange={(e) => setNameEdit(e.target.value)}
+                />
+              </fieldset>
               <fieldset>
                 <label htmlFor="email">Email * </label>
                 <input
@@ -70,24 +82,34 @@ export const EditProfile = () => {
               <fieldset>
                 <label htmlFor="username">Nombre de usuario * </label>
                 <input
-                  type="username"
+                  type="text"
                   id="username"
                   value={username}
                   name="username"
-                  maxLength="12"
                   required
                   onChange={(e) => setUsername(e.target.value)}
                 />
               </fieldset>
               <fieldset>
-                <label htmlFor="address">Dirección * </label>
+                <label htmlFor="phone">Teléfono </label>
                 <input
-                  type="address"
+                  type="text"
+                  id="phone"
+                  name="phone"
+                  value={phoneEdit}
+                  placeholder="Añade tu móvil de contacto"
+                  onChange={(e) => setPhoneEdit(e.target.value)}
+                />
+              </fieldset>
+              <fieldset>
+                <label htmlFor="address">Dirección </label>
+                <input
+                  type="text"
                   id="address"
                   name="address"
-                  value={address}
-                  required
-                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Añade domicilio"
+                  value={addressEdit}
+                  onChange={(e) => setAddressEdit(e.target.value)}
                 />
               </fieldset>
               <fieldset>
@@ -96,6 +118,7 @@ export const EditProfile = () => {
                   type="password"
                   id="pwd"
                   name="pwd"
+                  placeholder="Escribe tu contraseña"
                   required
                   onChange={(e) => setPwd(e.target.value)}
                 />
@@ -108,6 +131,7 @@ export const EditProfile = () => {
                   type="password"
                   id="newPwd"
                   name="newPwd"
+                  placeholder="contraseña nueva"
                   onChange={(e) => setPwdNew(e.target.value)}
                 />
               </fieldset>
@@ -116,6 +140,7 @@ export const EditProfile = () => {
                 <input
                   type="password"
                   id="repeatNewPwd"
+                  placeholder="Repite la contraseña"
                   name="repeatNewPwd"
                   onChange={(e) => setRepeatPwd(e.target.value)}
                 />

@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getMyUserDataService } from "../services/index";
+import { getMyUserCartService, getMyUserDataService } from "../services/index";
 
 export const AuthContext = createContext();
 
@@ -13,6 +13,7 @@ export const AuthProviderComponent = ({ children }) => {
   const [role, setRole] = useState(localStorage.getItem("role"));
   const [emailAuth, setEmailAuth] = useState(localStorage.getItem("email"));
   const [userName, setUserName] = useState("");
+  const [cartCount, setCartCount] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,11 +24,14 @@ export const AuthProviderComponent = ({ children }) => {
 
     if (token && idUser) {
       getMyUserDataService(token).then((userData) => {
-        setName(userData.name);
-        setUserName(userData.username);
-        setEmailAuth(userData.email);
-        setPhone(userData.phone);
-        setAddress(userData.address);
+        setName(userData[0].name);
+        setUserName(userData[0].username);
+        setEmailAuth(userData[0].email);
+        setPhone(userData[0].phone);
+        setAddress(userData[0].address);
+      });
+      getMyUserCartService(token).then((cartData) => {
+        setCartCount(cartData.products.length ? cartData.products.length : 0);
       });
     }
   }, [token]);
@@ -60,6 +64,8 @@ export const AuthProviderComponent = ({ children }) => {
         address,
         setAddress,
         setPhone,
+        cartCount,
+        setCartCount,
       }}
     >
       {children}
