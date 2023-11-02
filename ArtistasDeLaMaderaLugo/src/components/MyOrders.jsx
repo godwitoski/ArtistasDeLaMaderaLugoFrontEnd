@@ -6,7 +6,7 @@ function MyOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const { token } = useContext(AuthContext);
+  const { token, sales, idUser } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchMyOrders = async () => {
@@ -23,6 +23,22 @@ function MyOrders() {
     fetchMyOrders();
   }, []);
 
+  const getOrderStatus = (product_id) => {
+    const sale = sales.find(
+      (sale) => parseInt(sale.product_id) === parseInt(product_id)
+    );
+
+    if (sale) {
+      if (parseInt(sale.user_id) === parseInt(idUser)) {
+        return "Comprado";
+      } else {
+        return "Cancelado - Ya se ha vendido";
+      }
+    } else {
+      return "Pendiente";
+    }
+  };
+
   return (
     <div>
       <h1>Mis Pedidos</h1>
@@ -38,14 +54,7 @@ function MyOrders() {
                 Fecha del pedido:{" "}
                 {new Date(order.orderDate).toLocaleDateString()}
               </p>
-              <p>
-                Estado:{" "}
-                {order.cancelled
-                  ? "Cancelado"
-                  : order.ordered
-                  ? "Pendiente"
-                  : "Enviado"}
-              </p>
+              <p>Estado: {getOrderStatus(order.product_id)}</p>
             </li>
           ))}
         </ul>

@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import { getMyUserCartService, orderProductsService } from "../services/index";
 import { AuthContext } from "../context/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function OrderProduct() {
   const [products, setProducts] = useState([]);
-  const { token, name, emailAuth, phone, address } = useContext(AuthContext);
+  const { token, name, emailAuth, phone, address, setCartCount, cartCount } =
+    useContext(AuthContext);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [formData, setFormData] = useState({
@@ -14,13 +15,16 @@ function OrderProduct() {
     address: address,
     phone: phone,
   });
-
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const [cartProducts, setCartProducts] = useState([]); // Nuevo estado para los productos del carrito
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProductList = async () => {
       try {
         const cartData = await getMyUserCartService(token);
+        setCartProducts(cartData.products); // Actualiza el estado del carrito
         setProducts(cartData.products);
       } catch (error) {
         console.error("Error al obtener la lista de productos", error);
@@ -28,15 +32,13 @@ function OrderProduct() {
     };
 
     fetchProductList();
-  }, []);
+  }, [token]); // Asegúrate de volver a cargar los productos del carrito cuando cambie el token
 
   const handleCheckboxChange = (productId) => {
     if (selectedProducts.includes(productId)) {
       setSelectedProducts(selectedProducts.filter((id) => id !== productId));
     } else {
       setSelectedProducts([...selectedProducts, productId]);
-      console.log(selectedProducts, "soy selected");
-      console.log(productId, "soy el id");
     }
   };
 
@@ -64,11 +66,21 @@ function OrderProduct() {
 
       if (response.status === "OK") {
         setMessage(response.message);
+
+        setTimeout(() => {
+          // Navega a la página de órdenes en lugar de a la página de carrito
+          navigate("/user/myorders");
+          setCartCount(cartCount);
+        }, 3000);
       } else {
         setError("No se pudo realizar el pedido.");
       }
     } catch (error) {
       setError(error.message);
+      setTimeout(() => {
+        setCartProducts(products);
+        navigate("/user/mycart");
+      }, 2000);
     }
   };
 
@@ -116,38 +128,39 @@ function OrderProduct() {
             required
           />
         </fieldset>
-        {products.map((product) => (
-          <div className="product-list">
-            <div key={product.productId} className="product-order">
-              <label>
-                <input
-                  type="checkbox"
-                  name={`product-${product.id}`}
-                  checked={selectedProducts.includes(product.productId)}
-                  onChange={() => handleCheckboxChange(product.productId)}
-                />
-                <Link to={`/products/${product.productId}`}>
-                  {product.photos.length > 0 ? (
-                    <img
-                      src={`${
-                        import.meta.env.VITE_APP_BACKEND
-                      }/uploads/photos/${product.name}/${
-                        product.photos[0].photo
-                      }`}
-                      alt={product.name}
-                    />
-                  ) : (
-                    <p>Sin fotos</p>
-                  )}
-                </Link>
-                <h2>Producto: {product.name}</h2>
-                <p>Descripción: {product.description}</p>
-                <p>Precio: {product.price}€</p>
-                <p>Material: {product.type}</p>
-              </label>
+        {cartProducts &&
+          cartProducts.map((product) => (
+            <div className="product-list">
+              <div key={product.productId} className="product-order">
+                <label>
+                  <input
+                    type="checkbox"
+                    name={`product-${product.id}`}
+                    checked={selectedProducts.includes(product.productId)}
+                    onChange={() => handleCheckboxChange(product.productId)}
+                  />
+                  <Link to={`/products/${product.productId}`}>
+                    {product.photos.length > 0 ? (
+                      <img
+                        src={`${
+                          import.meta.env.VITE_APP_BACKEND
+                        }/uploads/photos/${product.name}/${
+                          product.photos[0].photo
+                        }`}
+                        alt={product.name}
+                      />
+                    ) : (
+                      <p>Sin fotos</p>
+                    )}
+                  </Link>
+                  <h2>Producto: {product.name}</h2>
+                  <p>Descripción: {product.description}</p>
+                  <p>Precio: {product.price}€</p>
+                  <p>Material: {product.type}</p>
+                </label>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
         <div>
           <button type="submit">Realizar Pedido</button>
         </div>

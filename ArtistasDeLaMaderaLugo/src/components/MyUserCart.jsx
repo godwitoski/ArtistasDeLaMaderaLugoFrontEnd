@@ -17,7 +17,7 @@ function MyUserCart() {
         setCartProducts(cartData.products);
 
         // Calcula el número de productos en el carrito y establece cartCount
-        setCartCount(cartData.products.length ? cartData.products.length : 0);
+        setCartCount(cartData.products ? cartData.products.length : 0);
 
         setLoading(false);
       } catch (error) {
@@ -27,7 +27,6 @@ function MyUserCart() {
     };
 
     fetchCartProducts();
-    console.log(cartProducts, "cart-prod");
   }, [token, setCartProducts]);
 
   return (

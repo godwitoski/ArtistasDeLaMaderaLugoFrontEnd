@@ -26,6 +26,9 @@ export const Header = () => {
             <Link to="/products/sales">
               <button>Ventas - admin</button>
             </Link>
+            <Link to="/products/orders">
+              <button>Ordenes pendientes</button>
+            </Link>
           </span>
 
           <Link to="/register">

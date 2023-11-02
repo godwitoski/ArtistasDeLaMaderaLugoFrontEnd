@@ -329,3 +329,45 @@ export const orderProductsService = async ({ formData, token }) => {
 
   return data;
 };
+
+//getOrders
+export const getTemporaryOrdersInfo = async (token) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_APP_BACKEND}/products/orders`,
+    {
+      headers: {
+        "content-type": "aplication/json",
+        authorization: `${token}`,
+      },
+    }
+  );
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message);
+  }
+
+  return data;
+};
+
+//getOrders
+export const moveProductToSalesService = async (productId, token) => {
+  console.log(productId, token);
+  const response = await fetch(
+    `${import.meta.env.VITE_APP_BACKEND}/products/${productId}/sales`,
+    {
+      method: "POST",
+      headers: {
+        "content-type": "aplication/json",
+        authorization: token,
+      },
+    }
+  );
+  const data = await response.json();
+  console.log(data);
+  if (!response.ok) {
+    throw new Error(data.message);
+  }
+
+  return data;
+};

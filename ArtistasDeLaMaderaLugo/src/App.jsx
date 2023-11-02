@@ -16,6 +16,7 @@ import { EditProfile } from "./components/EditProfile";
 import ProductSearch from "./pages/ProductSearch";
 import SalesInfoPage from "./pages/SalesInfoPage";
 import OrderProduct from "./components/orderProduct";
+import OrdersPendingPage from "./pages/OrdersPendingPage";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path="/products/search" element={<ProductSearch />} />
           <Route path="/products/sales" element={<SalesInfoPage />} />
           <Route path="/products/sendOrder" element={<OrderProduct />} />
+          <Route path="/products/orders" element={<OrdersPendingPage />} />
           <Route path="/users" element={<UsersInfo />} />
           <Route path="/user/mycart" element={<MyUserCart />} />
           <Route path="/user/myorders" element={<MyOrders />} />

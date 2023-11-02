@@ -16,7 +16,6 @@ function SalesInfoPage() {
     try {
       const response = await getSalesInfoService({ token, year, month });
       if (response.status === "OK") {
-        console.log(response.data, "soy res");
         setSalesData(response.data);
         setError("");
       } else {

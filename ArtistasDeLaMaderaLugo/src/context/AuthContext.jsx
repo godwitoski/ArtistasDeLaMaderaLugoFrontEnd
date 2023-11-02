@@ -1,6 +1,10 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getMyUserCartService, getMyUserDataService } from "../services/index";
+import {
+  getMyUserCartService,
+  getMyUserDataService,
+  getSalesInfoService,
+} from "../services/index";
 
 export const AuthContext = createContext();
 
@@ -10,6 +14,7 @@ export const AuthProviderComponent = ({ children }) => {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
+  const [sales, setSales] = useState([]);
   const [role, setRole] = useState(localStorage.getItem("role"));
   const [emailAuth, setEmailAuth] = useState(localStorage.getItem("email"));
   const [userName, setUserName] = useState("");
@@ -31,7 +36,10 @@ export const AuthProviderComponent = ({ children }) => {
         setAddress(userData[0].address);
       });
       getMyUserCartService(token).then((cartData) => {
-        setCartCount(cartData.products.length ? cartData.products.length : 0);
+        setCartCount(cartData.products ? cartData.products.length : 0);
+      });
+      getSalesInfoService({ token }).then((saleData) => {
+        setSales(saleData.data);
       });
     }
   }, [token]);
@@ -66,6 +74,8 @@ export const AuthProviderComponent = ({ children }) => {
         setPhone,
         cartCount,
         setCartCount,
+        sales,
+        setSales,
       }}
     >
       {children}
