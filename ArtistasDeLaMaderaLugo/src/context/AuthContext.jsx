@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  addToCartService,
   getMyUserCartService,
   getMyUserDataService,
   getSalesInfoService,
@@ -18,6 +19,7 @@ export const AuthProviderComponent = ({ children }) => {
   const [role, setRole] = useState(localStorage.getItem("role"));
   const [emailAuth, setEmailAuth] = useState(localStorage.getItem("email"));
   const [userName, setUserName] = useState("");
+  const [cancelledProducts, setCancelledProducts] = useState([]); // Un solo estado para productos cancelados
   const [cartCount, setCartCount] = useState(0);
   const navigate = useNavigate();
 
@@ -44,6 +46,33 @@ export const AuthProviderComponent = ({ children }) => {
     }
   }, [token]);
 
+  const transferTempCartToUserCart = async (token) => {
+    if (!token) {
+      return;
+    }
+
+    try {
+      const tempCart = JSON.parse(localStorage.getItem("tempCart")) || [];
+
+      if (tempCart.length > 0) {
+        for (const productId of tempCart) {
+          await addToCartService(productId, token);
+          getMyUserCartService(token).then((cartData) => {
+            setCartCount(cartData.products ? cartData.products.length : 0);
+          });
+          navigate("/user/mycart");
+        }
+
+        localStorage.removeItem("tempCart");
+      }
+    } catch (error) {
+      if (error.message == "El producto ya está su carrito.") {
+        localStorage.removeItem("tempCart");
+        navigate("/user/mycart");
+      }
+    }
+  };
+
   function logout() {
     setToken("");
     setIdUser("");
@@ -52,6 +81,7 @@ export const AuthProviderComponent = ({ children }) => {
     setName("");
     setUserName("");
     navigate("/");
+    setCartCount(0);
   }
 
   return (
@@ -76,6 +106,9 @@ export const AuthProviderComponent = ({ children }) => {
         setCartCount,
         sales,
         setSales,
+        transferTempCartToUserCart,
+        cancelledProducts,
+        setCancelledProducts, // Usar el estado de productos cancelados en lugar de "cancelled"
       }}
     >
       {children}

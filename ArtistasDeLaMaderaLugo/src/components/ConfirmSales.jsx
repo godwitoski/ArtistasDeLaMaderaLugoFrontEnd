@@ -1,14 +1,15 @@
 import React, { useState, useContext } from "react";
-import { moveProductToSalesService } from "../services/index"; // Importa el servicio adecuado
-import { Link } from "react-router-dom";
+import { moveProductToSalesService } from "../services/index";
 import { AuthContext } from "../context/AuthContext";
 
-function ConfirmSales({ productId }) {
+function ConfirmSales({ productId, onProductsUpdated }) {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const { token } = useContext(AuthContext);
 
   const handleAcceptClick = async () => {
+    // Limpiar los mensajes de éxito y error
+
     try {
       const response = await moveProductToSalesService(productId, token);
 
@@ -18,15 +19,21 @@ function ConfirmSales({ productId }) {
     } catch (error) {
       setError(error.message);
     }
+
+    // Llamar a onProductsUpdated después de limpiar los mensajes
+    setTimeout(() => {
+      setError(null);
+      setSuccess(null);
+      onProductsUpdated();
+    }, 2000);
   };
 
   return (
-    <div>
+    <>
       <button onClick={handleAcceptClick}>vender producto</button>
-      {/* <button onClick={onCancel}>Cancelar</button> */}
       {error && <p className="error-message">{error}</p>}
-      {success && <p>{success}</p>}
-    </div>
+      {success && <p className="success-message">{success}</p>}
+    </>
   );
 }
 

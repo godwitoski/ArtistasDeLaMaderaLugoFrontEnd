@@ -350,7 +350,7 @@ export const getTemporaryOrdersInfo = async (token) => {
   return data;
 };
 
-//getOrders
+//sellProduct
 export const moveProductToSalesService = async (productId, token) => {
   console.log(productId, token);
   const response = await fetch(
@@ -364,7 +364,27 @@ export const moveProductToSalesService = async (productId, token) => {
     }
   );
   const data = await response.json();
-  console.log(data);
+  if (!response.ok) {
+    throw new Error(data.message);
+  }
+
+  return data;
+};
+
+//sellProduct
+export const cancelOrderService = async (productId, token) => {
+  console.log(productId, token);
+  const response = await fetch(
+    `${import.meta.env.VITE_APP_BACKEND}/products/${productId}/cancelOrder`,
+    {
+      method: "DELETE",
+      headers: {
+        "content-type": "aplication/json",
+        authorization: token,
+      },
+    }
+  );
+  const data = await response.json();
   if (!response.ok) {
     throw new Error(data.message);
   }

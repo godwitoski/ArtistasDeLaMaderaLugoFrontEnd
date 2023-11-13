@@ -1,7 +1,9 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
+  const navigate = useNavigate();
   const [product, setProduct] = useState({
     name: "",
     description: "",
@@ -49,6 +51,9 @@ const AddProduct = () => {
 
       if (response.status === 200) {
         setMessage("Producto agregado correctamente.");
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
       } else {
         setMessage("Hubo un error, comprueba los datos");
       }
@@ -58,7 +63,7 @@ const AddProduct = () => {
   };
 
   return (
-    <div>
+    <div className="add-product">
       <h2>Agregar Producto</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -117,6 +122,18 @@ const AddProduct = () => {
             required
             onChange={handlePhotoChange}
           />
+          {photos && photos.length > 0 && (
+            <figure>
+              {photos.map((photo, index) => (
+                <img
+                  key={index}
+                  src={URL.createObjectURL(photo)}
+                  style={{ width: "150px", height: "200px" }}
+                  alt={`Preview ${index + 1}`}
+                />
+              ))}
+            </figure>
+          )}
         </div>
         <button type="submit">Agregar Producto</button>
       </form>

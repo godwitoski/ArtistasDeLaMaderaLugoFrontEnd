@@ -1,33 +1,156 @@
-import { useEffect, useState } from "react";
-import { getProducts } from "../services";
+import React, { useState, useEffect } from "react";
+import { getProducts } from "../services/index";
 import ProductsList from "../components/ProductsList";
+import { Link } from "react-router-dom";
 
 export const HomePage = () => {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState("Cargando...");
+  const [currentProductIndex, setCurrentProductIndex] = useState(0);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     const getAllProducts = async () => {
-      const products = await getProducts();
       try {
-        setProducts(products);
+        const fetchedProducts = await getProducts();
+        setProducts(fetchedProducts);
         setLoading(false);
       } catch (error) {
         setError(error.message);
         setLoading(false);
       }
-      return products;
     };
     getAllProducts();
-  }, [products.length]);
+  }, []);
+
+  useEffect(() => {
+    if (
+      !products[currentProductIndex] ||
+      !products[currentProductIndex].photos ||
+      products[currentProductIndex].photos.length === 0
+    ) {
+      return;
+    }
+
+    const productInterval = setInterval(nextProduct, 2000);
+
+    return () => {
+      clearInterval(productInterval);
+    };
+  }, [currentProductIndex, products]);
+
+  useEffect(() => {
+    if (
+      !products[currentProductIndex] ||
+      !products[currentProductIndex].photos ||
+      products[currentProductIndex].photos.length === 0
+    ) {
+      return;
+    }
+
+    const imageInterval = setInterval(nextSlide, 2000);
+
+    return () => {
+      clearInterval(imageInterval);
+    };
+  }, [currentImageIndex, products]);
+
+  const nextProduct = () => {
+    setCurrentProductIndex((currentProductIndex + 1) % products.length);
+    setCurrentImageIndex(0);
+  };
+
+  const prevProduct = () => {
+    setCurrentProductIndex(
+      currentProductIndex === 0 ? products.length - 1 : currentProductIndex - 1
+    );
+    setCurrentImageIndex(0);
+  };
+
+  const nextSlide = () => {
+    setCurrentImageIndex(
+      (currentImageIndex + 1) % products[currentProductIndex].photos.length
+    );
+  };
+
+  const prevSlide = () => {
+    setCurrentImageIndex(
+      currentImageIndex === 0
+        ? products[currentProductIndex].photos.length - 1
+        : currentImageIndex - 1
+    );
+  };
 
   return (
-    <section>
-      <h1>Bienvenido a Artistas de la madera</h1>
-      <ProductsList products={products} />
-      {loading ? <p>{loading}</p> : null}
+    <section className="home-page">
+      {products.length ? (
+        <>
+          <div className="home-content">
+            <div className="latest-products">
+              {products.slice(0, 2).map((product) => (
+                <div className="product-card">
+                  <Link
+                    key={product.productId}
+                    to={`/products/${product.productId}`}
+                  >
+                    <img
+                      src={`${
+                        import.meta.env.VITE_APP_BACKEND
+                      }/uploads/photos/${product.name}/${
+                        product.photos[0].photo
+                      }`}
+                      alt={product.name}
+                    />
+                  </Link>
+                  <h2 className="new-product-name">{product.name}</h2>
+                  <p className="new-product-price">{product.price}€</p>
+                  <p className="new-product">Nuevo</p>
+                </div>
+              ))}
+            </div>
+            <div className="carousel-container">
+              {products[currentProductIndex] &&
+              products[currentProductIndex].photos &&
+              products[currentProductIndex].photos.length > 0 ? (
+                <>
+                  <button
+                    onClick={prevProduct}
+                    className="carousel-button left"
+                  >
+                    &#8249;
+                  </button>
+                  <Link
+                    to={`/products/${products[currentProductIndex].productId}`}
+                  >
+                    <img
+                      src={`${
+                        import.meta.env.VITE_APP_BACKEND
+                      }/uploads/photos/${products[currentProductIndex].name}/${
+                        products[currentProductIndex].photos[0].photo
+                      }`}
+                      alt={`Slide ${currentImageIndex}`}
+                    />
+                  </Link>
+                  <button
+                    onClick={nextProduct}
+                    className="carousel-button right"
+                  >
+                    &#8250;
+                  </button>
+                </>
+              ) : null}
+            </div>
+          </div>
+
+          <h1>Bienvenido a Artistas de la Madera</h1>
+          <ProductsList products={products.slice(2)} />
+        </>
+      ) : (
+        <p>No se encontraron publicaciones recientes</p>
+      )}
       {error ? <p className="error-message">{error}</p> : null}
+      {loading ? <p>{loading}</p> : null}
     </section>
   );
 };

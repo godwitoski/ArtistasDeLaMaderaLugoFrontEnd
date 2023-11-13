@@ -1,0 +1,12 @@
+.searchPage{
+    text-align: center;
+    padding: 20px;
+    margin: 40px 20px;
+}
+
+.searchPage input{
+    padding: 7px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    width: 250px;
+}

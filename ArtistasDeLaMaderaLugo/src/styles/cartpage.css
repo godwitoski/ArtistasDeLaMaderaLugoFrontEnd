@@ -1,0 +1,16 @@
+.cartPage{
+    margin-top: 40px;
+    padding: 20px;
+    text-align: center;
+}
+
+.cartPage .product-list .product img{
+   width: 340px;
+   height: 260px;
+   object-fit: cover;
+
+}
+
+.cart-products a{
+    text-align: center;
+}

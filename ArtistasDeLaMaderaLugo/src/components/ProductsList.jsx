@@ -13,7 +13,9 @@ function ProductsList({ products }) {
 
   const removeProductfromCart = (productId) => {
     setProductList((products) =>
-      products.filter((product) => product.productId !== productId)
+      products.filter(
+        (product) => parseInt(product.productId) !== parseInt(productId)
+      )
     );
   };
 
@@ -29,55 +31,64 @@ function ProductsList({ products }) {
   return (
     <div className="product-list">
       {displayProducts.map((product, index) => (
-        <div
-          key={product.productId || index}
-          className="product"
-          style={{ border: "1px solid gray", padding: "10px", margin: "10px" }}
-        >
-          <Link to={`/products/${product.productId}`}>
-            {product.photos.length > 0 ? (
-              <img
-                src={`${import.meta.env.VITE_APP_BACKEND}/uploads/photos/${
-                  product.name
-                }/${product.photos[0].photo}`}
-                alt={product.name}
-              />
-            ) : (
-              <p>Sin fotos</p>
-            )}
-          </Link>
-          <h2>Producto: {product.name}</h2>
-          <p>Descripción: {product.description}</p>
-          <p>Precio: {product.price}€</p>
-          <p>Material: {product.type}</p>
-          <p>
-            {location.pathname.includes("/mycart")
-              ? `Guardado el: ${new Date(product.date).toLocaleDateString()}`
-              : `Publicado el: ${new Date(product.date).toLocaleDateString()}`}
-          </p>
-          <Link to={`/products/${product.productId}`}>
-            <button>Ver Producto</button>
-          </Link>
-          {!location.pathname.includes("/mycart") && (
-            <>
-              <AddToCart
-                productId={product.productId}
-                onAddToCart={() => updateCartCount(cartCount + 1)}
-              />
-              {role == "admin" && (
-                <DeleteProduct productId={product.productId} />
+        <div key={product.productId || index} className="product">
+          <div className="product-img">
+            <Link to={`/products/${product.productId}`}>
+              {product.photos.length > 0 ? (
+                <img
+                  src={`${import.meta.env.VITE_APP_BACKEND}/uploads/photos/${
+                    product.name
+                  }/${product.photos[0].photo}`}
+                  alt={product.name}
+                />
+              ) : (
+                <p>Sin fotos</p>
               )}
-            </>
-          )}
-          {location.pathname.includes("/mycart") && (
-            <RemoveToMyCart
-              productId={product.productId}
-              onRemove={() => {
-                removeProductfromCart(product.productId);
-                updateCartCount(cartCount - 1);
-              }}
-            />
-          )}
+            </Link>
+          </div>
+          <div className="product-info">
+            <h2>{product.name}</h2>
+            <p className="p-price"> {product.price}€</p>
+            <p className="p-description">
+              <strong> Descripción:</strong> {product.description}
+            </p>
+            <p className="p-material">
+              <strong>Material: </strong> {product.type}
+            </p>
+            <p>
+              {location.pathname.includes("/mycart")
+                ? `Guardado el: ${new Date(product.date).toLocaleDateString()}`
+                : null}
+            </p>
+            <div className="product-info-buttons">
+              <Link to={`/products/${product.productId}`}>
+                <button className="seeProduct-button">Ver Producto</button>
+              </Link>
+              {!location.pathname.includes("/mycart") && (
+                <>
+                  <AddToCart
+                    productId={product.productId}
+                    onAddToCart={() => updateCartCount(cartCount + 1)}
+                  />
+                  {role == "admin" && (
+                    <DeleteProduct productId={product.productId} />
+                  )}
+                </>
+              )}
+              {location.pathname.includes("/mycart") && (
+                <RemoveToMyCart
+                  productId={product.productId}
+                  onRemove={() => {
+                    removeProductfromCart(product.productId);
+                    updateCartCount(cartCount - 1);
+                  }}
+                />
+              )}
+            </div>
+            <h3 className={product.sold ? "sold" : "available"}>
+              {product.sold ? "Agotado" : "Disponible"}
+            </h3>
+          </div>
         </div>
       ))}
     </div>

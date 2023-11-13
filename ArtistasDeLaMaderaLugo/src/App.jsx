@@ -1,11 +1,21 @@
-import { Routes, Route } from "react-router-dom";
+import React from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import "./styles/App.css";
+import "./styles/Header.css";
+import "./styles/forms.css";
+import "./styles/homepage.css";
+import "./styles/cartpage.css";
+import "./styles/searchPage.css";
+import "./styles/orderProduct.css";
+import "./styles/orderPage.css";
+import "./styles/profilePage.css";
+import "./styles/infoSales.css";
+import "./styles/singleProduct.css";
 
 import { HomePage } from "./pages/HomePage";
 import { Register } from "./pages/Register";
 import { Login } from "./pages/Login";
 import { NotFoundPage } from "./pages/NotFoundPage";
-import { Header } from "./components/Header";
 import AddProduct from "./pages/Addproduct";
 import SingleProduct from "./pages/SingleProduct";
 import UsersInfo from "./components/UsersInfo";
@@ -17,11 +27,16 @@ import ProductSearch from "./pages/ProductSearch";
 import SalesInfoPage from "./pages/SalesInfoPage";
 import OrderProduct from "./components/orderProduct";
 import OrdersPendingPage from "./pages/OrdersPendingPage";
+import { Header } from "./components/Header";
 
 function App() {
+  const location = useLocation();
+  const hideHeader =
+    location.pathname === "/login" || location.pathname === "/register";
+
   return (
-    <div className={`body-app`}>
-      <Header />
+    <div className="body-app">
+      {!hideHeader && <Header />}
       <main className="app">
         <Routes>
           <Route path="/" element={<HomePage />} />

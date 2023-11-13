@@ -1,22 +1,28 @@
-import { useContext, useEffect, useState } from "react";
-import { getMyUserCartService } from "../services/index";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import ProductsList from "./ProductsList";
-import { Link } from "react-router-dom";
+import { getMyUserCartService } from "../services/index";
 
 function MyUserCart() {
+  const navigate = useNavigate();
   const [cartProducts, setCartProducts] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
-  const { token, setCartCount } = useContext(AuthContext); // Agrega setCartCount desde el contexto
+  const { token, setCartCount } = useContext(AuthContext);
 
   useEffect(() => {
+    if (!token) {
+      // Si el usuario no está autenticado, redirigir a la página de inicio de sesión
+      navigate("/login");
+      return;
+    }
+
     const fetchCartProducts = async () => {
       try {
         const cartData = await getMyUserCartService(token);
         setCartProducts(cartData.products);
 
-        // Calcula el número de productos en el carrito y establece cartCount
         setCartCount(cartData.products ? cartData.products.length : 0);
 
         setLoading(false);
@@ -27,10 +33,10 @@ function MyUserCart() {
     };
 
     fetchCartProducts();
-  }, [token, setCartProducts]);
+  }, [token, navigate]);
 
   return (
-    <div>
+    <div className="cartPage">
       <h1>Tu Carrito de Compras</h1>
       {loading ? (
         <p>Cargando productos en el carrito...</p>
@@ -39,7 +45,9 @@ function MyUserCart() {
           {cartProducts ? (
             <>
               <ProductsList products={cartProducts} />
-              <Link to={"/products/sendOrder"}>Continuar con la compra</Link>
+              <Link to="/products/sendOrder">
+                <button>Continuar con la compra</button>
+              </Link>
             </>
           ) : (
             <p>Tu carrito está vacío.</p>

@@ -1,0 +1,58 @@
+.orderProduct{
+    margin-top: 40px;
+    padding: 20px;
+    text-align: center;
+}
+
+
+.orderProduct form .product-order label{
+    display: flex;
+    width: 80%;
+    position: relative;
+    gap: 10px;
+    border: 1px solid #ccc;
+    margin: 5px auto;
+    padding: 10px;
+}
+
+.orderProduct form .product-order label input{
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+
+.orderProduct form .product-order img{
+   width: 200px;
+   height: 174px;
+   object-fit: cover;
+}
+
+.orderProduct .contact-order{
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 60%;
+    margin: auto;
+    text-align: start;
+}
+
+.orderProduct .contact-order h3{
+    margin: 15px 10px ;
+    text-decoration: underline;
+}
+
+.orderProduct form fieldset{
+ border: none;
+  display: inline-flex;
+  flex-wrap: wrap;
+  width: max-content;
+  justify-content: center;
+  align-items: center;
+  padding: 10px
+}
+.orderProduct form fieldset label{
+    margin-right: 5px;
+}
+

@@ -8,8 +8,13 @@ export const Login = () => {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const [error, setError] = useState("");
-  const { setToken, setIdUser, setRole, setEmailAuth } =
-    useContext(AuthContext);
+  const {
+    setToken,
+    setIdUser,
+    setRole,
+    setEmailAuth,
+    transferTempCartToUserCart,
+  } = useContext(AuthContext);
 
   const handleForm = async (e) => {
     e.preventDefault();
@@ -19,6 +24,7 @@ export const Login = () => {
       setToken(data.token);
       setEmailAuth(data.email);
       setRole(data.role);
+      transferTempCartToUserCart(data.token);
       navigate("/");
     } catch (error) {
       console.log(error.message);
@@ -32,6 +38,12 @@ export const Login = () => {
 
   return (
     <section className="form-pages">
+      <img
+        src="#"
+        alt="Logo artistas"
+        className="logo-form-pages"
+        onClick={handleLogoClick}
+      />
       <form className="form" onSubmit={handleForm}>
         <fieldset>
           <input

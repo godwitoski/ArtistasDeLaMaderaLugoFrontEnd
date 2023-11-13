@@ -1,0 +1,129 @@
+/* UsersInfo.css */
+
+.users-info {
+  padding: 20px;
+  margin-top: 40px;
+}
+
+
+.users-info div {
+  margin-top: 20px;
+}
+
+.users-info > div{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+} 
+
+.users-info div > div {
+  background-color: #323232;
+  border: 1px solid #525252;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.users-info div h2 {
+  color: #3498db;
+  margin-bottom: 10px;
+}
+
+.users-info div p {
+  color: #ddd;
+  margin-bottom: 8px;
+}
+
+.users-info div ul {
+  list-style: circle;
+  padding: 0 20px;
+}
+
+.users-info div ul li {
+  margin-bottom: 8px;
+  color: #ddd;
+}
+
+.users-info .error-message {
+  color: #ff0000;
+}
+
+
+/* Styles for SalesInfoPage */
+.sales-info-page {
+  padding: 20px;
+  margin-top: 40px;
+}
+
+
+.sales-info-page .filter-data{
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 25px;
+}
+
+.sales-info-page p {
+  color: #ddd;
+  margin: 10px 0 20px 5px;
+}
+
+.sales-info-page div {
+  margin-bottom: 20px;
+}
+
+.sales-info-page label {
+  color: #ccc;
+}
+
+.sales-info-page input {
+  width: 80px;
+  font-size: 16px;
+  text-align: center;
+  border: 1px solid #525252;
+  border-radius: 5px;
+}
+
+.sales-info-page button {
+  background-color: #3498db;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.sales-info-page button:hover {
+  background-color: #217dbb;
+}
+
+.sales-info-page table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.sales-info-page th, .sales-info-page td {
+  border: 1px solid #525252;
+  padding: 10px;
+  text-align: left;
+}
+
+.sales-info-page th {
+  background-color: #323232;
+  color: #ccc;
+}
+
+.sales-info-page tbody tr:nth-child(even) {
+  background-color: #555;
+}
+
+.sales-info-page tbody tr:nth-child(odd) {
+  background-color: #444;
+}
+
+.sales-info-page .error-message {
+  color: #ff0000;
+}

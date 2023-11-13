@@ -36,7 +36,7 @@ function ProductSearch() {
   }, [searchParams.name, searchParams.type]);
 
   return (
-    <div>
+    <div className="searchPage">
       <h1>Buscar Productos</h1>
       <p>Busca algún producto por su nombre o su tipo de material</p>
       <input

@@ -16,7 +16,7 @@ function OrderProduct() {
     phone: phone,
   });
   const [selectedProducts, setSelectedProducts] = useState([]);
-  const [cartProducts, setCartProducts] = useState([]); // Nuevo estado para los productos del carrito
+  const [cartProducts, setCartProducts] = useState([]);
 
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ function OrderProduct() {
     const fetchProductList = async () => {
       try {
         const cartData = await getMyUserCartService(token);
-        setCartProducts(cartData.products); // Actualiza el estado del carrito
+        setCartProducts(cartData.products);
         setProducts(cartData.products);
       } catch (error) {
         console.error("Error al obtener la lista de productos", error);
@@ -32,7 +32,7 @@ function OrderProduct() {
     };
 
     fetchProductList();
-  }, [token]); // Asegúrate de volver a cargar los productos del carrito cuando cambie el token
+  }, [token]);
 
   const handleCheckboxChange = (productId) => {
     if (selectedProducts.includes(productId)) {
@@ -68,7 +68,6 @@ function OrderProduct() {
         setMessage(response.message);
 
         setTimeout(() => {
-          // Navega a la página de órdenes en lugar de a la página de carrito
           navigate("/user/myorders");
           setCartCount(cartCount);
         }, 3000);
@@ -76,7 +75,14 @@ function OrderProduct() {
         setError("No se pudo realizar el pedido.");
       }
     } catch (error) {
-      setError(error.message);
+      if (
+        error.message ==
+        "Este producto ya ha sido enviado y está pendiente de revisión."
+      ) {
+        setError(error.message);
+      } else {
+        setError("No se pudo realizar el pedido.");
+      }
       setTimeout(() => {
         setCartProducts(products);
         navigate("/user/mycart");
@@ -85,53 +91,56 @@ function OrderProduct() {
   };
 
   return (
-    <div>
+    <div className="orderProduct">
       <h1>Selecciona los productos que deseas comprar</h1>
-      <form onSubmit={handleSubmit}>
-        <fieldset>
-          <label htmlFor="name">Nombre de contacto:</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            required
-          />
-        </fieldset>
-        <fieldset>
-          <label htmlFor="email">Email de contacto:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-          />
-        </fieldset>
-        <fieldset>
-          <label htmlFor="address">Dirección de envío:</label>
-          <input
-            type="text"
-            name="address"
-            value={formData.address}
-            onChange={handleInputChange}
-            required
-          />
-        </fieldset>
-        <fieldset>
-          <label htmlFor="phone">Teléfono de contacto:</label>
-          <input
-            type="tel"
-            name="phone"
-            value={formData.phone}
-            onChange={handleInputChange}
-            required
-          />
-        </fieldset>
+      <form className="order-product-form" onSubmit={handleSubmit}>
+        <div className="contact-order">
+          <h3> Datos de contacto </h3>
+          <fieldset>
+            <label htmlFor="name">Nombre de contacto:</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              required
+            />
+          </fieldset>
+          <fieldset>
+            <label htmlFor="email">Email de contacto:</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+            />
+          </fieldset>
+          <fieldset>
+            <label htmlFor="address">Dirección de envío:</label>
+            <input
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              required
+            />
+          </fieldset>
+          <fieldset>
+            <label htmlFor="phone">Teléfono de contacto:</label>
+            <input
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+              required
+            />
+          </fieldset>
+        </div>
         {cartProducts &&
           cartProducts.map((product) => (
-            <div className="product-list">
-              <div key={product.productId} className="product-order">
+            <div key={product.productId} className="product-list">
+              <div className="product-order">
                 <label>
                   <input
                     type="checkbox"
@@ -153,10 +162,14 @@ function OrderProduct() {
                       <p>Sin fotos</p>
                     )}
                   </Link>
-                  <h2>Producto: {product.name}</h2>
-                  <p>Descripción: {product.description}</p>
-                  <p>Precio: {product.price}€</p>
-                  <p>Material: {product.type}</p>
+                  <div className="product-info">
+                    <h2>{product.name}</h2>
+                    <p className="p-description">
+                      Descripción: {product.description}
+                    </p>
+                    <p className="p-price">Precio: {product.price}€</p>
+                    <p className="p-material">Material: {product.type}</p>
+                  </div>
                 </label>
               </div>
             </div>
@@ -166,7 +179,7 @@ function OrderProduct() {
         </div>
       </form>
       {error ? <p className="error-message">{error}</p> : null}
-      {message ? <p>{message}</p> : null}
+      {message ? <p className="success-message">{message}</p> : null}
     </div>
   );
 }

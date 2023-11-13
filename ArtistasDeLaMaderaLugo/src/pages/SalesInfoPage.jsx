@@ -1,7 +1,8 @@
-// SalesInfoPage.jsx
 import React, { useState, useEffect, useContext } from "react";
 import { getSalesInfoService } from "../services/index";
 import { AuthContext } from "../context/AuthContext";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 
 function SalesInfoPage() {
   const [year, setYear] = useState("");
@@ -29,33 +30,58 @@ function SalesInfoPage() {
     setLoading(false);
   };
 
+  const getTotalSales = () => {
+    return salesData
+      .reduce((total, sale) => total + parseFloat(sale.price), 0)
+      .toFixed(2);
+  };
+
+  const generatePDF = () => {
+    const pdf = new jsPDF();
+    pdf.autoTable({
+      head: [["Producto", "Comprador", "Fecha de Venta", "Precio"]],
+      body: salesData.map((sale) => [
+        sale.productName,
+        sale.name,
+        new Date(sale.soldDate).toLocaleDateString(),
+        `${sale.price}€`,
+      ]),
+    });
+    pdf.autoTable({
+      body: [["Total de Ventas", "", "", `${getTotalSales()}€`]],
+    });
+    pdf.save("ventas.pdf");
+  };
+
   useEffect(() => {
     handleSearch();
   }, []);
 
   return (
-    <div>
+    <div className="sales-info-page">
       <h1>Información de Ventas</h1>
-      <p>Selecciona un mes o una fecha para filtrar las ventas</p>
-      <div>
-        <label>Año:</label>
-        <input
-          type="number" // Cambia el tipo de input a number
-          placeholder="Año"
-          value={year}
-          onChange={(e) => setYear(e.target.value)}
-        />
+      <div className="filter-data">
+        <p>Escribe un mes o una fecha para filtrar las ventas</p>
+        <div>
+          <label>Año:</label>
+          <input
+            type="number"
+            placeholder="Año"
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Mes:</label>
+          <input
+            type="number"
+            placeholder="Mes"
+            value={month}
+            onChange={(e) => setMonth(e.target.value)}
+          />
+        </div>
+        <button onClick={handleSearch}>Filtrar</button>
       </div>
-      <div>
-        <label>Mes:</label>
-        <input
-          type="number" // Cambia el tipo de input a number
-          placeholder="Mes"
-          value={month}
-          onChange={(e) => setMonth(e.target.value)}
-        />
-      </div>
-      <button onClick={handleSearch}>Filtrar</button>
       {salesData.length > 0 ? (
         <div>
           <h2>Información de Venta</h2>
@@ -79,6 +105,8 @@ function SalesInfoPage() {
               ))}
             </tbody>
           </table>
+          <p>Total de Ventas: {getTotalSales()}€</p>
+          <button onClick={generatePDF}>Generar PDF</button>
         </div>
       ) : (
         <p>No se ha realizado ninguna venta</p>

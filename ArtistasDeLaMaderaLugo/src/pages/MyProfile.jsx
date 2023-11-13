@@ -25,20 +25,26 @@ function MyProfile() {
   }, []);
 
   return (
-    <div>
+    <div className="profilePage">
       <h1>Mi Perfil</h1>
       {loading ? <p>Cargando Perfil...</p> : null}
       {error ? <p className="error-message">{error}</p> : null}
       {user ? (
         <div>
           <h2>Usuario: {user.username}</h2>
-          <p>Nombre: {user.name}</p>
-          <p>Correo Electrónico: {user.email}</p>
           <p>
-            Teléfono: {user.phone ? user.phone : "No tiene teléfono añadido"}
+            <strong> Nombre:</strong>
+            {user.name}
           </p>
           <p>
-            Dirección:{" "}
+            <strong> Correo Electrónico:</strong> {user.email}
+          </p>
+          <p>
+            <strong>Teléfono:</strong>
+            {user.phone ? user.phone : "No tiene teléfono añadido"}
+          </p>
+          <p>
+            <strong>Dirección: </strong>
             {user.address ? user.address : "Aún no ha añadido dirección"}
           </p>
           <Link to="/user/editprofile">

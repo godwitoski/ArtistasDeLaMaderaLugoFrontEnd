@@ -20,7 +20,9 @@ const DeleteProduct = ({ productId }) => {
 
   return (
     <>
-      <button onClick={handleDelete}>Eliminar</button>
+      <button className="delete-product-button" onClick={handleDelete}>
+        Eliminar
+      </button>
 
       {error ? <p className="error-message">{error}</p> : null}
       {message ? <p>{message}</p> : null}

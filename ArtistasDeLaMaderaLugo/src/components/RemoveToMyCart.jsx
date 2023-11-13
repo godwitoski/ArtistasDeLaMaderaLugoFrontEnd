@@ -17,6 +17,7 @@ function RemoveToMyCart({ productId, onRemove }) {
       if (token) {
         const response = await removeToCartService(productId, token);
         setSuccess(response.message);
+
         onRemove();
       }
     } catch (error) {
@@ -29,7 +30,7 @@ function RemoveToMyCart({ productId, onRemove }) {
   return (
     <div>
       <button onClick={handleRemoveToCart} disabled={loading}>
-        ❌
+        Eliminar de mi carrito
       </button>
       {success && <p className="success-message">{success}</p>}
       {loading && <p>Cargando...</p>}

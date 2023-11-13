@@ -41,6 +41,12 @@ export const Register = () => {
 
   return (
     <section className="form-pages">
+      <img
+        src="#"
+        alt="Logo artistas"
+        className="logo-form-pages"
+        onClick={handleLogoClick}
+      />
       <form className="form" onSubmit={handleForm}>
         <fieldset>
           <input
