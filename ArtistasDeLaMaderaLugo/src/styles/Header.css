@@ -107,6 +107,11 @@
   text-decoration: none;
   transition: background 0.3s;
   gap: 10px;
+  align-items: center;
+}
+
+.right-buttons-header .logout-button{
+  height: 35px;
 }
 
 .right-buttons-header a:first-of-type button{

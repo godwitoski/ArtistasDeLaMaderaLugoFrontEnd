@@ -34,7 +34,7 @@
   color: #ddd;
   border-bottom: 1px solid #525252;
   padding-bottom: 10px;
-  width: 400px;
+  width: auto;
   word-wrap: break-word;
 }
 
@@ -131,3 +131,48 @@
   margin-top: 20px;
 }
 
+
+/*Responsive*/
+@media screen and (max-width: 1023px) {
+  
+  .edit-user-data{
+    flex-direction: column;
+  }
+
+  .edit-user-data > div{
+    margin-right: 0;
+  }
+  .edit-user-data div:nth-child(2){
+    border-top: 1px dashed #bbbbbb;
+    width: max-content;
+    padding-top: 10px;
+  }
+  .edit-user-data button{
+    bottom: 15px;
+    right: 15px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .edit-profile{
+    width: auto;
+  }
+  .edit-user-data fieldset{
+    width: 65vw;
+    padding: 10px 0px;
+  }
+  .profilePage{
+    padding: 30px;
+    width: 80vw;
+    height: 300px;
+  }
+  .profilePage a{
+    right: -15px
+  }
+}
+
+@media screen and (max-width: 400px) {
+.profilePage{
+    width: 95vw;
+  }
+}
