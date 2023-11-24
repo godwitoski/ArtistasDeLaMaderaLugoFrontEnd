@@ -1,8 +1,14 @@
 import React, { useState, useContext } from "react";
 import { cancelOrderService } from "../services/index";
 import { AuthContext } from "../context/AuthContext";
+import TokenCaducado from "./TokenCaducado";
 
-function CancelOrder({ productId, onProductsUpdated }) {
+function CancelOrder({
+  tokenCaducadoVisible,
+  setTokenCaducadoVisible,
+  productId,
+  onProductsUpdated,
+}) {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const { token, cancelledProducts, setCancelledProducts } =
@@ -21,9 +27,11 @@ function CancelOrder({ productId, onProductsUpdated }) {
             user_id: response.data[0].user_id,
           },
         ]);
-        console.log(response.data, response.message);
       }
     } catch (error) {
+      if (error.message === "Token Caducado") {
+        setTokenCaducadoVisible(true);
+      }
       setError(error.message);
     }
 
@@ -38,7 +46,8 @@ function CancelOrder({ productId, onProductsUpdated }) {
     <>
       <button onClick={handleCancelClick}>Cancelar venta</button>
       {error && <p className="error-message">{error}</p>}
-      {success && <p className="success-message">{success}</p>}
+      {success && <p className="success-message">Cancelando pedido</p>}
+      {tokenCaducadoVisible && <TokenCaducado />}
     </>
   );
 }

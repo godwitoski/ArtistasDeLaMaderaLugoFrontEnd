@@ -17,7 +17,26 @@
 
 .product-image {
   max-width: 50%;
+  position: relative;
 }
+
+.product-image::before {
+  content: "\1F50E"; 
+  font-size: 4em;
+  color: rgba(255, 255, 255, 0.5);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.2;
+  transition: opacity 0.8s ease;
+}
+
+.product-image:hover::before,
+.product-image:focus::before {
+  opacity: 1;
+}
+
 
 .product-image img {
   width: 550px;
@@ -42,8 +61,8 @@
   border: none;
   height: 35px;
   position: absolute;
-  bottom: -5px;
-  right: 35px;
+  bottom: -20px;
+  right: -25px;
   display: flex;
   align-items: center;
   background: #3498dbcf;
@@ -129,4 +148,90 @@ right: 2px;
 .modal-content img{
   height: 80vh;
   width: auto;
+}
+
+
+/*Responsive*/
+@media screen and (max-width: 1440px) {
+  .productPage{
+    width: 85vw;
+  }
+
+  .productPage .product-image img{
+    width: 470px;
+    height: 650px;
+  }
+}
+
+@media screen and (max-width: 1100px){
+  .productPage .product-image{
+    max-width: 100%;
+  }
+  .productPage .product-image img{
+    width: 100%;
+    height: 520px;
+  }
+   .productPage .product-detail{
+    flex-direction: column;
+  }
+  .productPage .product-info{
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .product-thumbnails{
+    margin-top: 0px;
+    align-self: center;
+    justify-content: space-evenly;
+    gap: 5px;
+  }
+  .product-thumbnail{
+    width: 140px;
+    height: 110px;
+  }
+  .productPage  .success-message,
+  .productPage .error-message{
+    text-align: center;
+    margin-top: 0px;
+  }
+
+}
+
+
+@media screen and (max-width: 768px){
+  .modal-content img{
+    height: 85vh;
+    width: 85vw;
+    object-fit: cover;
+  }
+  
+}
+@media screen and (max-width: 650px){
+  .productPage {
+    width: 80vw;
+  }
+  .productPage .product-image img{
+    height: 350px;
+  }
+  .product-detail{
+    gap: 10px;
+  }
+}
+
+@media screen and (max-width: 550px){
+  .productPage {
+    width: 70vw;
+  }
+  .productPage .product-image img{
+    height: 250px;
+  }
+  .product-thumbnail {
+    width: 80px;
+    height: 80px;
+  }
+
+  .modal-content img{
+    height: 70vh;
+    width: 85vw;
+    object-fit: contain;
+  }
 }

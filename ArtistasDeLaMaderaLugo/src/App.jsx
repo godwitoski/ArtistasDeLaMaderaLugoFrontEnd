@@ -28,6 +28,7 @@ import SalesInfoPage from "./pages/SalesInfoPage";
 import OrderProduct from "./components/orderProduct";
 import OrdersPendingPage from "./pages/OrdersPendingPage";
 import { Header } from "./components/Header";
+import { Footer } from "./components/Footer";
 
 function App() {
   const location = useLocation();
@@ -56,6 +57,7 @@ function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
+      <Footer />
     </div>
   );
 }

@@ -19,6 +19,7 @@
 
 .form-pages .logo-form-pages{
   text-align: center;
+  cursor: pointer;
 }
 
 
@@ -157,6 +158,23 @@ text-decoration: none;
     width: 100%;
   }
 
+  .add-product form div figure{
+    flex-direction: row;
+    gap: 5px;
+  }
+  .add-product form div figure img{
+    width: 100px !important;
+    height: 95px !important;
+    object-fit: cover;
+  }
 }
+
+
+@media screen and (max-width: 375px) {
+  .add-product input, .add-product textarea {
+      width: 130px;
+    }
+}
+
 
 

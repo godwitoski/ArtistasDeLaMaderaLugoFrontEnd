@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { getProducts } from "../services/index";
 import ProductsList from "../components/ProductsList";
 import { Link } from "react-router-dom";
+import TokenCaducado from "../components/TokenCaducado";
+import { useProducts } from "../hooks/useProducts";
 
 export const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -9,6 +11,7 @@ export const HomePage = () => {
   const [loading, setLoading] = useState("Cargando...");
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { tokenCaducadoVisible, setTokenCaducadoVisible } = useProducts();
 
   useEffect(() => {
     const getAllProducts = async () => {
@@ -74,14 +77,6 @@ export const HomePage = () => {
     );
   };
 
-  const prevSlide = () => {
-    setCurrentImageIndex(
-      currentImageIndex === 0
-        ? products[currentProductIndex].photos.length - 1
-        : currentImageIndex - 1
-    );
-  };
-
   return (
     <section className="home-page">
       {products.length ? (
@@ -89,7 +84,7 @@ export const HomePage = () => {
           <div className="home-content">
             <div className="latest-products">
               {products.slice(0, 2).map((product) => (
-                <div className="product-card">
+                <div className="product-card" key={product.productId}>
                   <Link
                     key={product.productId}
                     to={`/products/${product.productId}`}
@@ -143,14 +138,19 @@ export const HomePage = () => {
             </div>
           </div>
 
-          <h1>Bienvenido a Artistas de la Madera</h1>
-          <ProductsList products={products.slice(2)} />
+          <h1>Bienvenidos a La naturaleza como arte</h1>
+          <ProductsList
+            tokenCaducadoVisible={tokenCaducadoVisible}
+            setTokenCaducadoVisible={setTokenCaducadoVisible}
+            products={products.slice(2)}
+          />
         </>
       ) : (
         <p>No se encontraron publicaciones recientes</p>
       )}
       {error ? <p className="error-message">{error}</p> : null}
       {loading ? <p>{loading}</p> : null}
+      {tokenCaducadoVisible && <TokenCaducado />}
     </section>
   );
 };

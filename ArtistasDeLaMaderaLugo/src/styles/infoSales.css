@@ -127,3 +127,20 @@
 .sales-info-page .error-message {
   color: #ff0000;
 }
+
+
+
+
+@media screen and (max-width: 500px) {
+  .sales-info-page .filter-data{
+    flex-direction: column;
+    gap: 0px;
+  }
+  .sales-info-page {
+    padding: 10px 0px;
+  }
+
+  .sales-info-page th, .sales-info-page td{
+    padding: 6px;
+  }
+}

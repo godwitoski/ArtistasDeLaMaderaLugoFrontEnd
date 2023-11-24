@@ -1,8 +1,13 @@
 import React, { useContext, useState } from "react";
 import { deleteProductService } from "../services/index";
 import { AuthContext } from "../context/AuthContext";
+import TokenCaducado from "./TokenCaducado";
 
-const DeleteProduct = ({ productId }) => {
+const DeleteProduct = ({
+  productId,
+  tokenCaducadoVisible,
+  setTokenCaducadoVisible,
+}) => {
   const { token } = useContext(AuthContext);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -14,6 +19,9 @@ const DeleteProduct = ({ productId }) => {
         setMessage(response.message);
       }
     } catch (error) {
+      if (error.message === "Token Caducado") {
+        setTokenCaducadoVisible(true);
+      }
       setError(error.message);
     }
   };
@@ -26,6 +34,7 @@ const DeleteProduct = ({ productId }) => {
 
       {error ? <p className="error-message">{error}</p> : null}
       {message ? <p>{message}</p> : null}
+      {tokenCaducadoVisible && <TokenCaducado />}
     </>
   );
 };

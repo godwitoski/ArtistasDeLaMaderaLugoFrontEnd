@@ -2,12 +2,15 @@ import React, { useState, useEffect, useContext } from "react";
 import { getMyProfileService } from "../services/index";
 import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
+import { useProducts } from "../hooks/useProducts";
+import TokenCaducado from "../components/TokenCaducado";
 
 function MyProfile() {
   const [user, setUser] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const { token } = useContext(AuthContext);
+  const { tokenCaducadoVisible, setTokenCaducadoVisible } = useProducts();
 
   useEffect(() => {
     const fetchMyProfile = async () => {
@@ -16,6 +19,9 @@ function MyProfile() {
         setUser(data.user[0]);
         setLoading(false);
       } catch (error) {
+        if (error.message === "Token Caducado") {
+          setTokenCaducadoVisible(true);
+        }
         setError(error.message);
         setLoading(false);
       }
@@ -52,6 +58,7 @@ function MyProfile() {
           </Link>
         </div>
       ) : null}
+      {tokenCaducadoVisible && <TokenCaducado />}
     </div>
   );
 }

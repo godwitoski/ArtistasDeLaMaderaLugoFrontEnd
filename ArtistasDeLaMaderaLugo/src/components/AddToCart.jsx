@@ -1,8 +1,14 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { addToCartService } from "../services/index";
+import TokenCaducado from "./TokenCaducado";
 
-function AddToCart({ productId, onAddToCart }) {
+function AddToCart({
+  tokenCaducadoVisible,
+  setTokenCaducadoVisible,
+  productId,
+  onAddToCart,
+}) {
   const { token } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -31,6 +37,9 @@ function AddToCart({ productId, onAddToCart }) {
         setSuccess("Producto añadido temporalmente a tu carrito");
       }
     } catch (error) {
+      if (error.message === "Token Caducado") {
+        setTokenCaducadoVisible(true);
+      }
       setError(error.message);
     }
 
@@ -56,6 +65,7 @@ function AddToCart({ productId, onAddToCart }) {
       {success && <p className="success-message">{success}</p>}
       {loading && <p>Cargando...</p>}
       {error && <p className="error-message">{error}</p>}
+      {tokenCaducadoVisible && <TokenCaducado />}
     </div>
   );
 }

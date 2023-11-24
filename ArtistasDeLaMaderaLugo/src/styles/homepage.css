@@ -216,4 +216,15 @@
   .carousel-container{
     height: 250px;
   }
+
+  .product-list .product-info-buttons{
+    position: static;
+  }
+
+  .product-list .product .success-message,
+  .product-list .product .error-message{
+    bottom: -30px;
+    font-size: 12px;
+    top: auto;
+  }
 }

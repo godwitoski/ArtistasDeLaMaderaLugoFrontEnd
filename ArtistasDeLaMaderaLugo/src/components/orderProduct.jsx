@@ -2,8 +2,9 @@ import React, { useState, useEffect, useContext } from "react";
 import { getMyUserCartService, orderProductsService } from "../services/index";
 import { AuthContext } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import TokenCaducado from "./TokenCaducado";
 
-function OrderProduct() {
+function OrderProduct({ tokenCaducadoVisible, setTokenCaducadoVisible }) {
   const [products, setProducts] = useState([]);
   const { token, name, emailAuth, phone, address, setCartCount, cartCount } =
     useContext(AuthContext);
@@ -75,6 +76,9 @@ function OrderProduct() {
         setError("No se pudo realizar el pedido.");
       }
     } catch (error) {
+      if (error.message === "Token Caducado") {
+        setTokenCaducadoVisible(true);
+      }
       if (
         error.message ==
         "Este producto ya ha sido enviado y está pendiente de revisión."
@@ -180,6 +184,7 @@ function OrderProduct() {
       </form>
       {error ? <p className="error-message">{error}</p> : null}
       {message ? <p className="success-message">{message}</p> : null}
+      {tokenCaducadoVisible && <TokenCaducado />}
     </div>
   );
 }

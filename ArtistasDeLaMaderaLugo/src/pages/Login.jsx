@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { logInUserService } from "../services";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import completeLogo from "../resources/LogoSample_ByTailorBrands.png";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ export const Login = () => {
   return (
     <section className="form-pages">
       <img
-        src="#"
+        src={completeLogo}
         alt="Logo artistas"
         className="logo-form-pages"
         onClick={handleLogoClick}

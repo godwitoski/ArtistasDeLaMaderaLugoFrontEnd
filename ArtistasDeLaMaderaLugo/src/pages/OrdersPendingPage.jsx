@@ -5,12 +5,15 @@ import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import ConfirmSales from "../components/ConfirmSales";
 import CancelOrder from "../components/CancelOrder";
+import { useProducts } from "../hooks/useProducts";
+import TokenCaducado from "../components/TokenCaducado";
 
 function OrdersPendingPage() {
   const { token } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState(null);
   const [productsUpdated, setProductsUpdated] = useState(false);
+  const { tokenCaducadoVisible, setTokenCaducadoVisible } = useProducts();
 
   useEffect(() => {
     const fetchPendingOrders = async () => {
@@ -23,6 +26,9 @@ function OrdersPendingPage() {
           setOrders([]);
         }
       } catch (error) {
+        if (error.message === "Token Caducado") {
+          setTokenCaducadoVisible(true);
+        }
         setError("No se pudieron cargar los pedidos pendientes.");
         setOrders([]);
       }
@@ -53,7 +59,6 @@ function OrdersPendingPage() {
               <th>Email</th>
               <th>Precio</th>
               <th></th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -83,16 +88,20 @@ function OrdersPendingPage() {
                 <td>{order.email}</td>
                 <td>{order.price}€</td>
                 <td>
-                  <ConfirmSales
-                    productId={order.productId}
-                    onProductsUpdated={handleProductsUpdated}
-                  />
-                </td>
-                <td>
-                  <CancelOrder
-                    productId={order.productId}
-                    onProductsUpdated={handleProductsUpdated}
-                  />
+                  <div className="buttons-container">
+                    <ConfirmSales
+                      tokenCaducadoVisible={tokenCaducadoVisible}
+                      setTokenCaducadoVisible={setTokenCaducadoVisible}
+                      productId={order.productId}
+                      onProductsUpdated={handleProductsUpdated}
+                    />
+                    <CancelOrder
+                      tokenCaducadoVisible={tokenCaducadoVisible}
+                      setTokenCaducadoVisible={setTokenCaducadoVisible}
+                      productId={order.productId}
+                      onProductsUpdated={handleProductsUpdated}
+                    />
+                  </div>
                 </td>
               </tr>
             ))}
@@ -102,6 +111,7 @@ function OrdersPendingPage() {
         <p>No hay pedidos pendientes</p>
       )}
       {error && <p className="error-message">{error}</p>}
+      {tokenCaducadoVisible && <TokenCaducado />}
     </div>
   );
 }

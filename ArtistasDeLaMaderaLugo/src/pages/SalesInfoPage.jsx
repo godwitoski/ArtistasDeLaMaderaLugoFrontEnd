@@ -3,6 +3,8 @@ import { getSalesInfoService } from "../services/index";
 import { AuthContext } from "../context/AuthContext";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
+import { useProducts } from "../hooks/useProducts";
+import TokenCaducado from "../components/TokenCaducado";
 
 function SalesInfoPage() {
   const [year, setYear] = useState("");
@@ -11,6 +13,7 @@ function SalesInfoPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { token } = useContext(AuthContext);
+  const { tokenCaducadoVisible, setTokenCaducadoVisible } = useProducts();
 
   const handleSearch = async () => {
     setLoading(true);
@@ -24,6 +27,9 @@ function SalesInfoPage() {
         setError("No se encontraron ventas para estas fechas.");
       }
     } catch (error) {
+      if (error.message === "Token Caducado") {
+        setTokenCaducadoVisible(true);
+      }
       setSalesData([]);
       setError(error.message);
     }
@@ -113,6 +119,7 @@ function SalesInfoPage() {
       )}
       {loading && <p>Cargando resultados...</p>}
       {error && <p className="error-message">{error}</p>}
+      {tokenCaducadoVisible && <TokenCaducado />}
     </div>
   );
 }

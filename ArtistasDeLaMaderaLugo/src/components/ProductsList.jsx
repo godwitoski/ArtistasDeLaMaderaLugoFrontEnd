@@ -5,7 +5,11 @@ import RemoveToMyCart from "./RemoveToMyCart";
 import { AuthContext } from "../context/AuthContext";
 import DeleteProduct from "./DeleteProduct";
 
-function ProductsList({ products }) {
+function ProductsList({
+  products,
+  tokenCaducadoVisible,
+  setTokenCaducadoVisible,
+}) {
   const location = useLocation();
   const { cartCount, setCartCount, role } = useContext(AuthContext);
 
@@ -67,17 +71,25 @@ function ProductsList({ products }) {
               {!location.pathname.includes("/mycart") && (
                 <>
                   <AddToCart
+                    tokenCaducadoVisible={tokenCaducadoVisible}
+                    setTokenCaducadoVisible={setTokenCaducadoVisible}
                     productId={product.productId}
                     onAddToCart={() => updateCartCount(cartCount + 1)}
                   />
                   {role == "admin" && (
-                    <DeleteProduct productId={product.productId} />
+                    <DeleteProduct
+                      productId={product.productId}
+                      tokenCaducadoVisible={tokenCaducadoVisible}
+                      setTokenCaducadoVisible={setTokenCaducadoVisible}
+                    />
                   )}
                 </>
               )}
               {location.pathname.includes("/mycart") && (
                 <RemoveToMyCart
                   productId={product.productId}
+                  tokenCaducadoVisible={tokenCaducadoVisible}
+                  setTokenCaducadoVisible={setTokenCaducadoVisible}
                   onRemove={() => {
                     removeProductfromCart(product.productId);
                     updateCartCount(cartCount - 1);

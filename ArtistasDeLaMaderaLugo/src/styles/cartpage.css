@@ -14,3 +14,32 @@
 .cart-products a{
     text-align: center;
 }
+
+
+/* Para pantallas de 1000px */
+@media screen and (max-width: 1000px)  {
+    .cartPage .product-list .product img{
+        width: 220px;
+    }
+    .cartPage .product-list .product-info-buttons{
+        position: static;
+    }
+
+}
+
+@media screen and (max-width: 700px)  {
+    .cartPage{
+        padding: 20px 0;
+    }
+    .cartPage .product-list .product img{
+        width: 100%;
+    }
+}
+
+/* Para pantallas de 430px */
+@media screen and (max-width: 430px) {
+   
+    .cartPage .product-list .product img{
+       height: 185px;
+    }
+}

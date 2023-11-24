@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { registerUserService } from "../services";
+import { registerUserService } from "../services/index";
+import completeLogo from "../resources/LogoSample_ByTailorBrands.png";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ export const Register = () => {
   return (
     <section className="form-pages">
       <img
-        src="#"
+        src={completeLogo}
         alt="Logo artistas"
         className="logo-form-pages"
         onClick={handleLogoClick}

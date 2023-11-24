@@ -3,9 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import ProductsList from "./ProductsList";
 import { getMyUserCartService } from "../services/index";
+import { useProducts } from "../hooks/useProducts";
+import TokenCaducado from "./TokenCaducado";
 
 function MyUserCart() {
   const navigate = useNavigate();
+  const { tokenCaducadoVisible, setTokenCaducadoVisible } = useProducts();
+
   const [cartProducts, setCartProducts] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -27,6 +31,9 @@ function MyUserCart() {
 
         setLoading(false);
       } catch (error) {
+        if (error.message === "Token Caducado") {
+          setTokenCaducadoVisible(true);
+        }
         setError(error.message);
         setLoading(false);
       }
@@ -55,6 +62,7 @@ function MyUserCart() {
         </div>
       )}
       {error && <p className="error-message">{error}</p>}
+      {tokenCaducadoVisible && <TokenCaducado />}
     </div>
   );
 }

@@ -1,6 +1,8 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import TokenCaducado from "../components/TokenCaducado";
+import { useProducts } from "../hooks/useProducts";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -13,6 +15,7 @@ const AddProduct = () => {
   const [photos, setPhotos] = useState([]);
   const [message, setMessage] = useState("");
   const { token } = useContext(AuthContext);
+  const { tokenCaducadoVisible, setTokenCaducadoVisible } = useProducts();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,9 +58,15 @@ const AddProduct = () => {
           navigate("/");
         }, 2000);
       } else {
-        setMessage("Hubo un error, comprueba los datos");
+        if (response.status === 401) {
+          setTokenCaducadoVisible(true);
+        }
+        setMessage("Hubo un error, compruebe los datos");
       }
     } catch (error) {
+      if (error.message === "Token Caducado") {
+        setTokenCaducadoVisible(true);
+      }
       setMessage("Hubo un error, comprueba los datos");
     }
   };
@@ -138,6 +147,7 @@ const AddProduct = () => {
         <button type="submit">Agregar Producto</button>
       </form>
       {message && <p>{message}</p>}
+      {tokenCaducadoVisible && <TokenCaducado />}
     </div>
   );
 };

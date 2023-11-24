@@ -163,16 +163,11 @@
   }
   .profilePage{
     padding: 30px;
-    width: 80vw;
+    width: 80%;
     height: 300px;
   }
   .profilePage a{
-    right: -15px
-  }
-}
-
-@media screen and (max-width: 400px) {
-.profilePage{
-    width: 95vw;
+    right: -15px;
+    bottom: -50px;
   }
 }

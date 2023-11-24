@@ -262,7 +262,7 @@ export const addToCartService = async (productId, token) => {
   return data;
 };
 
-// addToCartService.js
+// RemoveToCartService.js
 export const removeToCartService = async (productId, token) => {
   const response = await fetch(
     `${import.meta.env.VITE_APP_BACKEND}/products/${productId}`,
@@ -385,6 +385,30 @@ export const cancelOrderService = async (productId, token) => {
     }
   );
   const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.message);
+  }
+
+  return data;
+};
+
+//deleteorder
+
+export const deletesingleorder = async (productId, token) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_APP_BACKEND}/user/myorders/${productId}`,
+    {
+      method: "delete",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: token,
+      },
+    }
+  );
+
+  const data = await response.json();
+
+  console.log(data, "soy delete");
   if (!response.ok) {
     throw new Error(data.message);
   }

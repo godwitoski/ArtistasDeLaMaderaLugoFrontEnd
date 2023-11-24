@@ -18,7 +18,9 @@
     margin: 10px 0;
     padding: 15px;
     border-radius: 8px;
+    position: relative;
   }
+  
 
   .ordersPage h2 {
     font-size: 18px;
@@ -50,62 +52,111 @@
   }
 
 
-  /* OrdersPendingPage*/
+/* OrdersPendingPage.css */
 
-  .orders-pending-page {
-    padding: 20px;
-    margin-top: 40px;
+.orders-pending-page {
+  padding: 20px;
+  margin-top: 70px;
+  position: relative;
+}
+
+.orders-pending-page h1 {
+  margin-bottom: 20px;
+}
+
+.orders-pending-page table {
+  width: 90vw;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.orders-pending-page th,
+.orders-pending-page td {
+  border: 1px solid #525252;
+  padding: 10px;
+  text-align: center;
+}
+
+.orders-pending-page th {
+  background-color: #323232;
+  color: #ccc;
+}
+
+.orders-pending-page tbody tr:nth-child(even) {
+  background-color: #555;
+}
+
+.orders-pending-page tbody tr:nth-child(odd) {
+  background-color: #444;
+}
+
+.orders-pending-page img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.orders-pending-page .success-message {
+  position: absolute;
+  width: max-content;
+  left: 20px;
+  top: 27px;
+  font-size: 13px;
+}
+
+.orders-pending-page .error-message {
+  position: absolute;
+  color: red;
+  font-size: 13px;
+  width: 8vw;
+}
+
+  .orders-pending-page .buttons-container {
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    gap: 10px;
+    display: flex;
   }
 
-  .orders-pending-page h1 {
-    margin-bottom: 20px;
-  }
-
+/* Botones en la parte inferior en pantallas más pequeñas */
+@media screen and (max-width: 1400px) {
   .orders-pending-page table {
-    width: 90vw;
-    border-collapse: collapse;
-    margin-top: 20px;
+    width: 100%;
   }
 
   .orders-pending-page th,
   .orders-pending-page td {
-    border: 1px solid #525252;
-    padding: 10px;
-    text-align: center;
-  }
-
-  .orders-pending-page th {
-    background-color: #323232;
-    color: #ccc;
-  }
-
-  .orders-pending-page tbody tr:nth-child(even) {
-    background-color: #555;
-  }
-
-  .orders-pending-page tbody tr:nth-child(odd) {
-    background-color: #444;
+    font-size: 13px;
   }
 
   .orders-pending-page img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
+    width: 60px;
+    height: 60px;
   }
 
 
-  .orders-pending-page .success-message{
-    position: absolute;
-    width: max-content;
-    left: 20px;
-    top: 27px;
-    font-size: 13px;
+
+}
+
+@media screen and (max-width: 800px) {
+  .orders-pending-page{
+    padding: 0;
+  }
+  .orders-pending-page th,
+  .orders-pending-page td {
+    font-size: 11px;
   }
 
-  .orders-pending-page  .error-message{
-    position: absolute;
-    color: red;
-    font-size: 13px;
-    width: 8vw;
+  .orders-pending-page .buttons-container button{
+    font-size: 11px;
   }
-
+}
+@media screen and (max-width: 715px) {
+  .orders-pending-page th,
+  .orders-pending-page td {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}

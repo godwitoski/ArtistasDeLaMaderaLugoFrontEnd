@@ -1,18 +1,10 @@
 import { useState, useContext } from "react";
 
-const useProducts = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+export const useProducts = () => {
+  const [tokenCaducadoVisible, setTokenCaducadoVisible] = useState(false);
 
   return {
-    products,
-    setProducts,
-    loading,
-    setLoading,
-    error,
-    setError,
+    tokenCaducadoVisible,
+    setTokenCaducadoVisible,
   };
 };
-
-export default usePosts;

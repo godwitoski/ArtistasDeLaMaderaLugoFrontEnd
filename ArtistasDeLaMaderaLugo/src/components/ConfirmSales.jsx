@@ -1,8 +1,14 @@
 import React, { useState, useContext } from "react";
 import { moveProductToSalesService } from "../services/index";
 import { AuthContext } from "../context/AuthContext";
+import TokenCaducado from "./TokenCaducado";
 
-function ConfirmSales({ productId, onProductsUpdated }) {
+function ConfirmSales({
+  productId,
+  onProductsUpdated,
+  tokenCaducadoVisible,
+  setTokenCaducadoVisible,
+}) {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const { token } = useContext(AuthContext);
@@ -17,6 +23,9 @@ function ConfirmSales({ productId, onProductsUpdated }) {
         setSuccess("Producto vendido con éxito");
       }
     } catch (error) {
+      if (error.message === "Token Caducado") {
+        setTokenCaducadoVisible(true);
+      }
       setError(error.message);
     }
 
@@ -33,6 +42,7 @@ function ConfirmSales({ productId, onProductsUpdated }) {
       <button onClick={handleAcceptClick}>vender producto</button>
       {error && <p className="error-message">{error}</p>}
       {success && <p className="success-message">{success}</p>}
+      {tokenCaducadoVisible && <TokenCaducado />}
     </>
   );
 }

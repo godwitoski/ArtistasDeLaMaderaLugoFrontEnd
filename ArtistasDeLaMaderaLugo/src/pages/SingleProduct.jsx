@@ -4,10 +4,13 @@ import { getSingleProductService } from "../services/index";
 import { AuthContext } from "../context/AuthContext";
 import AddToCart from "../components/AddToCart";
 import Modal from "react-modal";
+import { useProducts } from "../hooks/useProducts";
+import TokenCaducado from "../components/TokenCaducado";
 
 const SingleProduct = () => {
   const { productId } = useParams();
   const { cartCount, setCartCount } = useContext(AuthContext);
+  const { tokenCaducadoVisible, setTokenCaducadoVisible } = useProducts();
 
   const [product, setProduct] = useState(null);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
@@ -24,6 +27,9 @@ const SingleProduct = () => {
           setSelectedPhoto(productData[0].photos[0].photo);
         }
       } catch (error) {
+        if (error.message === "Token Caducado") {
+          setTokenCaducadoVisible(true);
+        }
         console.error("Error al cargar el producto:", error);
       }
     };
@@ -62,21 +68,23 @@ const SingleProduct = () => {
             )}
           </div>
           <div className="product-info">
-            <h1>{product.name}</h1>
-            <p>{product.description}</p>
-            <p>
-              <strong>Precio:</strong>{" "}
-              {product.price ? product.price : "Precio no disponible"} €
-            </p>
-            <p>
-              <strong>Material:</strong> {product.type}
-            </p>
-            <p>
-              <strong>Publicado el: </strong>
-              {product.date
-                ? new Date(product.date).toLocaleDateString()
-                : "Fecha no disponible"}
-            </p>
+            <div className="info-product">
+              <h1>{product.name}</h1>
+              <p>{product.description}</p>
+              <p>
+                <strong>Precio:</strong>{" "}
+                {product.price ? product.price : "Precio no disponible"} €
+              </p>
+              <p>
+                <strong>Material:</strong> {product.type}
+              </p>
+              <p>
+                <strong>Publicado el: </strong>
+                {product.date
+                  ? new Date(product.date).toLocaleDateString()
+                  : "Fecha no disponible"}
+              </p>
+            </div>
             <div className="product-thumbnails">
               {product.photos &&
                 product.photos.map((photo, index) => (
@@ -95,6 +103,8 @@ const SingleProduct = () => {
                 ))}
             </div>
             <AddToCart
+              tokenCaducadoVisible={tokenCaducadoVisible}
+              setTokenCaducadoVisible={setTokenCaducadoVisible}
               productId={productId}
               onAddToCart={() => updateCartCount(cartCount + 1)}
             />
@@ -120,6 +130,7 @@ const SingleProduct = () => {
       ) : (
         <p>Cargando producto...</p>
       )}
+      {tokenCaducadoVisible && <TokenCaducado />}
     </div>
   );
 };

@@ -1,8 +1,12 @@
 import { useState, useContext } from "react";
 import { editUserDataService } from "../services/index";
 import { AuthContext } from "../context/AuthContext";
+import TokenCaducado from "./TokenCaducado";
 
-export const EditProfile = () => {
+export const EditProfile = ({
+  tokenCaducadoVisible,
+  setTokenCaducadoVisible,
+}) => {
   const { token, userName, logout, name, emailAuth, phone, address } =
     useContext(AuthContext);
   const [email, setEmail] = useState(emailAuth);
@@ -46,6 +50,9 @@ export const EditProfile = () => {
       }
       e.target.reset();
     } catch (error) {
+      if (error.message === "Token Caducado") {
+        setTokenCaducadoVisible(true);
+      }
       setError(error.message);
     }
   };
@@ -156,6 +163,7 @@ export const EditProfile = () => {
           </form>
         </div>
         {error ? <p className="error-message">{error}</p> : null}
+        {tokenCaducadoVisible && <TokenCaducado />}
       </div>
     </section>
   );

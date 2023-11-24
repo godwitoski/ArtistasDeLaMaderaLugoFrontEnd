@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import { getMyOrdersService } from "../services/index";
 import { AuthContext } from "../context/AuthContext";
+import { useProducts } from "../hooks/useProducts";
+import TokenCaducado from "./TokenCaducado";
+import DeleteSingleOrder from "./deleteSingleOrder";
 
 function MyOrders() {
   const [orders, setOrders] = useState([]);
+  const { tokenCaducadoVisible, setTokenCaducadoVisible } = useProducts();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const { token, sales, idUser, cancelledProducts } = useContext(AuthContext);
@@ -15,13 +19,16 @@ function MyOrders() {
         setOrders(ordersData.products);
         setLoading(false);
       } catch (error) {
+        if (error.message === "Token Caducado") {
+          setTokenCaducadoVisible(true);
+        }
         setError(error.message);
         setLoading(false);
       }
     };
 
     fetchMyOrders();
-  }, [token]);
+  }, [token, orders]);
 
   const getOrderStatus = (product_id) => {
     const sale = sales.find(
@@ -75,10 +82,12 @@ function MyOrders() {
                 Estado:{" "}
                 <span>{getOrderStatus(order.product_id).statusText}</span>
               </p>
+              <DeleteSingleOrder productId={order.product_id} />
             </li>
           ))}
         </ul>
       ) : null}
+      {tokenCaducadoVisible && <TokenCaducado />}
     </div>
   );
 }
