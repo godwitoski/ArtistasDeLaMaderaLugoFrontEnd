@@ -51,6 +51,7 @@ footer{
   border-top: 1px solid #525252;
   gap: 15px;
   font-size: 0.85em;
+  flex-wrap: wrap;
 }
 
 footer > div:nth-child(2){

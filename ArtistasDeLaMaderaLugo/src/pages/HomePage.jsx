@@ -17,7 +17,10 @@ export const HomePage = () => {
     const getAllProducts = async () => {
       try {
         const fetchedProducts = await getProducts();
-        setProducts(fetchedProducts);
+        console.log(fetchedProducts, "el fetch");
+        if (fetchedProducts) {
+          setProducts(fetchedProducts);
+        }
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -77,6 +80,8 @@ export const HomePage = () => {
     );
   };
 
+  console.log(products);
+
   return (
     <section className="home-page">
       {products.length ? (
@@ -89,14 +94,18 @@ export const HomePage = () => {
                     key={product.productId}
                     to={`/products/${product.productId}`}
                   >
-                    <img
-                      src={`${
-                        import.meta.env.VITE_APP_BACKEND
-                      }/uploads/photos/${product.name}/${
-                        product.photos[0].photo
-                      }`}
-                      alt={product.name}
-                    />
+                    {product.photos && product.photos.length > 0 ? (
+                      <img
+                        src={`${
+                          import.meta.env.VITE_APP_BACKEND
+                        }/uploads/photos/${product.name}/${
+                          product.photos[0].photo
+                        }`}
+                        alt={product.name}
+                      />
+                    ) : (
+                      <div>No hay imágenes disponibles</div>
+                    )}
                   </Link>
                   <h2 className="new-product-name">{product.name}</h2>
                   <p className="new-product-price">{product.price}€</p>
@@ -122,7 +131,8 @@ export const HomePage = () => {
                       src={`${
                         import.meta.env.VITE_APP_BACKEND
                       }/uploads/photos/${products[currentProductIndex].name}/${
-                        products[currentProductIndex].photos[0].photo
+                        products[currentProductIndex].photos[currentImageIndex]
+                          .photo
                       }`}
                       alt={`Slide ${currentImageIndex}`}
                     />
