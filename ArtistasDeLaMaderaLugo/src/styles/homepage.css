@@ -30,7 +30,7 @@
 }
 
 .product-card img {
-  height: 250px;
+  height: 280px;
   width: 420px;
   object-fit: cover;
   
@@ -73,7 +73,7 @@
 .carousel-container {
   position: relative;
   width: 65%;
-  height: 630px;
+  height: 700px;
   overflow: hidden;
   border: 1px solid #525252;
   border-radius: 10px;

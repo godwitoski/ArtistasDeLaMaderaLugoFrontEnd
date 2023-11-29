@@ -131,8 +131,7 @@ export const HomePage = () => {
                       src={`${
                         import.meta.env.VITE_APP_BACKEND
                       }/uploads/photos/${products[currentProductIndex].name}/${
-                        products[currentProductIndex].photos[currentImageIndex]
-                          .photo
+                        products[currentProductIndex].photos[0].photo
                       }`}
                       alt={`Slide ${currentImageIndex}`}
                     />

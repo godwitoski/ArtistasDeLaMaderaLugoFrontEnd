@@ -6,10 +6,11 @@ import AddToCart from "../components/AddToCart";
 import Modal from "react-modal";
 import { useProducts } from "../hooks/useProducts";
 import TokenCaducado from "../components/TokenCaducado";
+import DeleteProduct from "../components/DeleteProduct";
 
 const SingleProduct = () => {
   const { productId } = useParams();
-  const { cartCount, setCartCount } = useContext(AuthContext);
+  const { cartCount, setCartCount, role } = useContext(AuthContext);
   const { tokenCaducadoVisible, setTokenCaducadoVisible } = useProducts();
 
   const [product, setProduct] = useState(null);
@@ -102,12 +103,21 @@ const SingleProduct = () => {
                   </div>
                 ))}
             </div>
-            <AddToCart
-              tokenCaducadoVisible={tokenCaducadoVisible}
-              setTokenCaducadoVisible={setTokenCaducadoVisible}
-              productId={productId}
-              onAddToCart={() => updateCartCount(cartCount + 1)}
-            />
+            <>
+              <AddToCart
+                tokenCaducadoVisible={tokenCaducadoVisible}
+                setTokenCaducadoVisible={setTokenCaducadoVisible}
+                productId={productId}
+                onAddToCart={() => updateCartCount(cartCount + 1)}
+              />
+              {role == "admin" && (
+                <DeleteProduct
+                  productId={productId}
+                  tokenCaducadoVisible={tokenCaducadoVisible}
+                  setTokenCaducadoVisible={setTokenCaducadoVisible}
+                />
+              )}
+            </>
           </div>
           <Modal
             isOpen={isModalOpen}
