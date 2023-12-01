@@ -28,7 +28,7 @@ function MyOrders() {
     };
 
     fetchMyOrders();
-  }, [token, orders]);
+  }, [token, orders.length]);
 
   const getOrderStatus = (product_id) => {
     const sale = sales.find(
